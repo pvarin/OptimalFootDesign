@@ -48,7 +48,9 @@ for(i=1:size(y,1))
     %axis(1.1*[-2*L,2*L,-2*L,2*L])
     pause(0.005);
     
-    if (dist_to_ground_level(q,L,1)<=0)&&(to_cartesian(q()))
+    [X1,X2]=to_cartesian(q,L);
+    
+    if (dist_to_ground_level(q,L,1)<=0)&&((X2(1)>0.1)||(X2(1)<-0.1))
         t(i)
         inc=i
         break 
