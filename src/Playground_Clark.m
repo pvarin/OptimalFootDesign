@@ -48,7 +48,7 @@ for(i=1:size(y,1))
     axis(1.1*[-2*L,2*L,-2*L,2*L])
     pause(0.005);
     
-    if dist_to_ground(q,L)<=0
+    if dist_to_ground_level(q,L)<=0
         t(i)
         break
         
