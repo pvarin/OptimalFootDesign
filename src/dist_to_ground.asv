@@ -1,0 +1,4 @@
+function dist=dist_to_ground(q)
+
+
+dist=abs(q(2));
