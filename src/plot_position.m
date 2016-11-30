@@ -7,7 +7,7 @@ function plot_position(q,L,gamma)
         
         R=[cos(-gamma),-sin(-gamma);sin(-gamma),cos(-gamma)];
 
-        fig=figure(1)
+        fig=figure(1);
         set(fig,'Position',[20,100,500,500])
         clf
         hold on
