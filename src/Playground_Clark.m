@@ -1,23 +1,4 @@
-%%
-thetaVec=-pi/2:0.1:pi/2;
-phiVec=0:0.1:pi;
-L=4;
 
-for(i=1:length(phiVec))
-    theta=0.2;%thetaVec(i);
-    phi=phiVec(i);
-    
-    q=[theta, phi];
-    plot_position(q,L);
-    axis(1.1*[-L,L,-0.2,2*L])
-    pause(0.005);
-    
-end
-
-
-
-
-%%
 clc
 q0=[pi/3;pi/7;pi/10;pi/11]
 beta=0.1;
@@ -26,9 +7,8 @@ L=1;
 
 tspan = [0 5];
 y0=[pi/10;pi/5.5;-1;-0.5];
-%[FunHand, qdot]=dynamics_rigid(q0,beta,gamma,L);
 
- g=9.81; %[m/s^2] acceleration due to gravity
+g=9.81; %[m/s^2] acceleration due to gravity
 FunHand = @(t,q)[ q(3);...
                     q(4);...
                    (1/(1+2*beta*(1-cos(q(2)))-beta*(1-cos(q(2)))))*...
