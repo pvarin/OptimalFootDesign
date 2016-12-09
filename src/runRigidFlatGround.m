@@ -21,9 +21,9 @@ for i=1:50
             
     %Plot the phase portraits
     figure(20);
-    subplot(2,1,1);
+    subplot(2,1,1); hold on;
     plot(Q(1,:),Q(3,:),'-o');
-    subplot(2,1,2);
+    subplot(2,1,2); hold on;
     plot(Q(2,:),Q(4,:),'-o');
 
     animate_compass_gait(T,Q,params);
