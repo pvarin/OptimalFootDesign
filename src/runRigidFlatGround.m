@@ -1,4 +1,5 @@
-clc
+clc;
+close all;
 
 %Define Constants and Initial Conditions
 params.m = 1;
@@ -29,9 +30,9 @@ for i=1:50
     animate_compass_gait(T,Q,params);
     
     if (info ~= 1)
-        if (info == 2)
+        if (info == -1)
             disp('Failure: integration took more than allotted time')
-        elseif (info == 3)
+        elseif (info == 2)
             disp('Failure: robot started tipping backwards')
         else
             disp('Failure: unknown failure')% this should never happen

@@ -1,6 +1,6 @@
-function [T, Q, info] = rk_solve(derivs, tmax, h, q0, collision_func, dist_to_ground_func)
+function [T, Q, info] = rk_solve(derivs, tmax, h, q0, collision_func, dist_to_ground_func, failure_func)
 %
-% [T, Q, info] = rk_solve(derivs, h, q0, collision_func, dist_to_ground_func)
+% [T, Q, info] = rk_solve(derivs, h, q0, collision_func, dist_to_ground_func, failure_func)
 %
 % Inputs:   derivs = function handle of derivative function
 %           tmax   = maximum time to simulate (assuming no collisions are found) 
@@ -9,18 +9,20 @@ function [T, Q, info] = rk_solve(derivs, tmax, h, q0, collision_func, dist_to_gr
 %
 %           collision_func      = function handle for colision detection
 %           dist_to_ground_func = function handle for distance to ground
+%           failure_func        = function handle that signals the failure
+%                                 condition
 %
 %           *** NOTE:   All function handles (derivs, collision_func,
-%                       distance_to_ground) must be in terms of
+%                       distance_to_ground, failure_func) must be in terms of
 %                       ONLY the states (q).
 %
 % Outputs:  T    =  Time vector
 %           Q    =  State trajectory vector (there are length(t) rows,
 %                   each with a state vactor in them)
 %           info =  Integer specifying success or failure
-%                   1 -> Success
-%                   2 -> No collision detected before tmax
-%                   3 -> Failure, began tipping backwards
+%                   -1 -> Failed to detect a collision
+%                    1 -> Success
+%                   >1 -> User defined failures based on failure_func
 
 %BEGIN PROGRAM ===========================================================
 
@@ -42,22 +44,22 @@ function [T, Q, info] = rk_solve(derivs, tmax, h, q0, collision_func, dist_to_gr
         i=i+1;
         
         % check for the robot tipping over backwards
-        dQ = derivs(Q(:,i));
-        if dQ(1) > 0
-            info = 3;
+        info = failure_func(Q(:,i));
+        if info ~= 1
             Q = Q(:,1:i);
             T = T(1:i);
             return
         end
     end
     
+    % make sure that the initial condition was satisfied
     if i==1
         error('Bad initial condition: collision detected on first timestep'); 
     end
     
-    info = 1;
+    % make sure a collision was detected
     if (collision_func(Q(:,i)) ~= 1)
-        info = 2;
+        info = -1;
         return
     end
     
