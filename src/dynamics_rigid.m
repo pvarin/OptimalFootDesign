@@ -1,43 +1,30 @@
-function [qdot]=dynamics_rigid(q,beta,gamma,L)
+function [qdot]=dynamics_rigid(q,params)
 % I'm defining q here to be [theta, phi, thetadot, phidot]
 % 
 % Inputs:   q     = States
-%           beta  = Ratio of foot mass to body mass (m/M)
-%           gamma = Ramp angle (rad)
-%           L     = Length of the legs
+%           params= A parameter object containing (L, gamma, M, m)
 
-    g=9.81; %[m/s^2] acceleration due to gravity
-    
+    % unpack the state;
     theta  = q(1);
     phi    = q(2);
-    thetaD = q(3);
-    phiD   = q(4);
+    d_theta = q(3);
+    d_phi   = q(4);
     
+    % unpack the parameters
+    beta = params.m/params.M;
+    gamma = params.gamma;
+    L = params.L;
+    g=9.81; %[m/s^2] acceleration due to gravity
     
+    % compute the derivatives
     thetaDD = (1/(1+2*beta*(1-cos(phi))-beta*(1-cos(phi))))*...
-              (beta*sin(phi)*(phiD^2-2*thetaD*phiD)...
+              (beta*sin(phi)*(d_phi^2-2*d_theta*d_phi)...
                   - (beta*g/L)*(sin(theta-phi-gamma) - sin(theta-gamma))...
                   + (g/L)*sin(theta-gamma));
             
     phiDD   = (1/(beta*(1-cos(phi))-beta))*...
-              (-beta*thetaD^2*sin(phi) - (beta*g/L)*sin(theta-phi-gamma));
+              (-beta*d_theta^2*sin(phi) - (beta*g/L)*sin(theta-phi-gamma));
     
 
-    qdot = [thetaD; phiD; thetaDD; phiDD];
-    
-    
-    
-    %Function Handle
-%     
-%     FunHand = @(t,q)[ q(3);...
-%                     q(4);...
-%                    (1/(1+2*beta*(1-cos(q(2)))-beta*(1-cos(q(2)))))*...
-%                    (beta*sin(q(2))*(q(4)^2-2*q(3)*q(4))...
-%                       - (beta*g/L)*(sin(q(1)-q(2)-gamma) - sin(q(1)-gamma))...
-%                       + (g/L)*sin(q(1)-gamma));...
-%                     (1/(beta*(1-cos(q(2)))-beta))*...
-%                     (-beta*q(3)^2*sin(q(2)) - (beta*g/L)*sin(q(1)-q(2)-gamma))];
-%        
-
-
+    qdot = [d_theta; d_phi; thetaDD; phiDD];
 end
