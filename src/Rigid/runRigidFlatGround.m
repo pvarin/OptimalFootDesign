@@ -2,13 +2,19 @@ clc;
 close all;
 
 %Define Constants and Initial Conditions
-params.m = 1.00;
+params.m = 5;
 params.M = 10;
 params.beta = 0.1;
 params.L = 1;
-params.gamma = 2.84*pi/180;
+params.gamma = 0.03*pi/180;
+params.a=0.5;
+params.b=0.5;
 
-q0=[pi/10.5;pi/5.2;-0.9;0.1];
+Theta0=pi/15;
+Phi0=2*Theta0;
+
+
+q0=[params.gamma;0;-0.4;-2.4];
 
 for i=1:50
     disp(strcat('Starting Step #',num2str(i)))
