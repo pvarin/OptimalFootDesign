@@ -2,20 +2,19 @@ clc;
 close all;
 
 %Define Constants and Initial Conditions
-params.m = 5;
+params.m = 1;
 params.M = 10;
 params.beta = 0.1;
 params.L = 1;
-params.gamma = 0.03*pi/180;
+params.gamma = 2.84*pi/180;
 params.a=0.5;
 params.b=0.5;
 
-Theta0=pi/15;
+Theta0=pi/10;
 Phi0=2*Theta0;
 
 
-q0=[params.gamma;0;-0.4;-2.4];
-
+q0=[Theta0;Phi0;-1.0;-0.5];
 for i=1:50
     disp(strcat('Starting Step #',num2str(i)))
 
@@ -44,15 +43,8 @@ for i=1:50
     %animate_compass_gait(T(end),Q(:,end),params);
     
     if (info ~= 1)
-        if (info == -1)
-            disp('Failure: integration took more than allotted time')
-        elseif (info == 2)
-            disp('Failure: robot started tipping backwards')
-        elseif (info == 3)
-            disp('Failure: robot started tipping forward')
-        else
-            disp('Failure: unknown failure')% this should never happen
-        end
+        msg = get_error_message(info);
+        disp(msg);
         break
     end
 end
