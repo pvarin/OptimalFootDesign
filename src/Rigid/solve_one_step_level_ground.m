@@ -35,8 +35,9 @@ function [T, Q, info] = solve_one_step_level_ground(q0,params,varargin)
     dynamics       = @(q) dynamics_rigid(q,params);   
     collision      = @(q) collision_rigid_level(q);
     dist_to_ground = @(q) dist_to_ground_level(q,params);
+    failure_func   = @(q,solving) rigid_failure(q,params.L,solving);
     
-    [T, Q, info] = rk_solve(dynamics, options.tmax, options.h, q0, collision, dist_to_ground, @rigid_failure);
+    [T, Q, info] = rk_solve(dynamics, options.tmax, options.h, q0, collision, dist_to_ground, failure_func);
     if (info ~= 1)
         return
     end

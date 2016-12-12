@@ -43,14 +43,22 @@ function [T, Q, info] = rk_solve(derivs, tmax, h, q0, collision_func, dist_to_gr
         Q(:,i+1) = rk_step(derivs, Q(:,i),h);
         i=i+1;
         
-        % check for the robot tipping over backwards
-        info = failure_func(Q(:,i));
+        % check for the robot tipping over backward
+        info = failure_func(Q(:,i),1);
         if info ~= 1
             Q = Q(:,1:i);
             T = T(1:i);
             return
         end
     end
+    
+    %check if the robot is tipping forward
+    info = failure_func(Q(:,i),0);
+            if info ~= 1
+            Q = Q(:,1:i);
+            T = T(1:i);
+            return
+        end
     
     % make sure that the initial condition was satisfied
     if i==1

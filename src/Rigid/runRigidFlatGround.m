@@ -2,13 +2,13 @@ clc;
 close all;
 
 %Define Constants and Initial Conditions
-params.m = 1;
+params.m = 2;
 params.M = 10;
 params.beta = 0.1;
 params.L = 1;
-params.gamma = 2.5*pi/180;
+params.gamma = 2*pi/180;
 
-q0=[pi/10.5;pi/5.5;-1;-0.5];
+q0=[pi/10.5;pi/5.5;-1.0;-0.5];
 
 for i=1:50
     disp(strcat('Starting Step #',num2str(i)))
@@ -34,6 +34,8 @@ for i=1:50
             disp('Failure: integration took more than allotted time')
         elseif (info == 2)
             disp('Failure: robot started tipping backwards')
+        elseif (info == 3)
+            disp('Failure: robot started tipping forward')
         else
             disp('Failure: unknown failure')% this should never happen
         end
