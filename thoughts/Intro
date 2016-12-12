@@ -1,0 +1,20 @@
+\section{Compass Gait Model}
+The compass gait model for walking is a passive-dynamic walking system diagrammed in Figure \ref{fig:need_a_reference}. The compass gait consists of two legs connected at the hip with a pin joint. The leg in contact with the ground is referred to as the `plant' leg or `stance' leg, while the  other leg is referred to as the `swing' leg. When the swing leg comes in contact with the ground the the swing leg becomes the stance leg and the transition is modelled as an impulse in which the angular momentum of the system is conserved. The swing dynamics of the compass gait are identical to that of the double pendulum.
+
+The compass gait is a well studied model, and has been shown to have stable walking gaits on flat terrain with a constant slope \ref{bib:need_a_reference}. We can intuitively understand how the compass gait stabilizes it's energy, because, while the compass gait increases it's kinetic energy with each downhill step, it loses energy during each collision event; cyclic gaits, therefore, correspond to situations where the energy gained during the swing phase is exactly equal to the energy lost during the transition event. A more formal analysis of the stability of the the compass gait walking can be acheived with Poincare maps.
+
+Some work has also been done to study the stability of the compass gait on rough terrain. Because the compass gait has point-feet, we can model rough terrain by considering the slope at each step to be a random variable. Figure \ref{fig:need_a_reference} depicts how a random slope is dynamically equivalent to a rough terrain. Be treating the slope as a random variable, the map from one step to another becomes non-deterministic and the usual Poincare map approach is less meaningful and the gaurantee of stability vanishes. Instead we can analyze `metastability' by understanding the mean time to failure for the compass gait. One approach proposed in \ref{bib:need_a_reference} considers a Poincare section in phase space, as in traditional Poincare stability analysis, but discretizes this Poincare section so that the dynamics can be modelled as a random walk on a directed graph which lends itself to techniques in spectral graph analysis.
+
+
+\section{Mean time to Failure: Random Walk on a Directed Graph}
+Consider a graph where each node represents a state that the compass gait can be in at the beginning of a step, including a special `failure state', and each of the edges represents a probabilistic transition after one full step, where the weight of the edge corresponds to the probability of that transition and the sum of the outgoing edges of every node must sum to 1. The failure state in this graph is a sink, with a self-transition probability of 1. The states of the compass gait are of course continuous, so in order to construct the graph we discretize the states and bucket them appropriately. This directed graph now completely characterizes the stochastic dynamics of the compass-gait on uneven terrain, and the step sequence of the compass gait walker is a random walk on this graph.
+
+By constructing the laplacian of this directed graph we can conduct a rigorous analysis of the mean time to failure of the compass gait walker.
+
+\subsection{Spectral Graph Analysis and Random Walks}
+
+% a lot of math should go here
+
+\subsection{Constructing the Graph Laplacian}
+
+We can construct the graph laplacian directly from the transition probabilities. In order to compute the transition probabilities we must first establish the probability distribution for the slope. This distribution can be chosen to reflect a physical situation based on real terrain, but for the purposes of this paper we will choose to use a normal distribution for the slope, so that we can conduct stability analysis that is parameterized by only two variables: the mean $\mu$ and standard deviation $\sigma$ of the slope. We compute transition probabilities for each of the discretized states by simulating a single step for a variety of slopes, bucketing the resulting state, and scaling the probability of each transition by the probability of the corresponding slope.
