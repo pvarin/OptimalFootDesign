@@ -20,14 +20,18 @@ function [T, Q, info] = rk_solve(derivs, tmax, h, q0, collision_func, dist_to_gr
 %           Q    =  State trajectory vector (there are length(t) rows,
 %                   each with a state vactor in them)
 %           info =  Integer specifying success or failure
+%                   -2 -> Bad initial condition
 %                   -1 -> Failed to detect a collision
 %                    1 -> Success
 %                   >1 -> User defined failures based on failure_func
 
 %BEGIN PROGRAM ===========================================================
 
+    % define the number of consecutive failures
+    max_failure = 5;
+
     % start with a fixed timestep
-    N = ceil(tmax/h);
+    N = ceil(tmax/h) + max_failure;
     T = 0:h:h*(N-1);
     
     Q = zeros(length(q0),N);
@@ -39,30 +43,34 @@ function [T, Q, info] = rk_solve(derivs, tmax, h, q0, collision_func, dist_to_gr
     
     % integrate until the collition function is violated
     i = 1;
-    while collision_func(Q(:,i)) ~= 1 && i<N
+    num_consecutive_failures = 0;
+    while (num_consecutive_failures < max_failure && i<N)
+        if collision_func(Q(:,i)) || (failure_func(Q(:,i),1) ~= 1)
+            num_consecutive_failures = num_consecutive_failures + 1;
+        else
+            num_consecutive_failures = 0;
+        end
+        
         Q(:,i+1) = rk_step(derivs, Q(:,i),h);
         i=i+1;
-        
-        % check for the robot tipping over backward
-        info = failure_func(Q(:,i),1);
-        if info ~= 1
-            Q = Q(:,1:i);
-            T = T(1:i);
-            return
-        end
     end
     
-    %check if the robot is tipping forward
-    info = failure_func(Q(:,i),0);
-            if info ~= 1
-            Q = Q(:,1:i);
-            T = T(1:i);
-            return
-        end
+    i = i-num_consecutive_failures;
     
-    % make sure that the initial condition was satisfied
+    % check if the initial condition was bad
     if i==1
-        error('Bad initial condition: collision detected on first timestep'); 
+        Q = Q(:,1);
+        T = T(1);
+        info = -2;
+        return
+    end
+    
+    % if failed set the failure flag
+    info = failure_func(Q(:,i),1);
+    if (info ~= 1)
+        T = T(1:i);
+        Q = Q(:,1:i);
+        return
     end
     
     % make sure a collision was detected
@@ -71,18 +79,28 @@ function [T, Q, info] = rk_solve(derivs, tmax, h, q0, collision_func, dist_to_gr
         return
     end
     
-    % iterate until the collision function is within tolerence
-    % (note: there is an assumption that the collision function is continuous)
-    while abs(dist_to_ground_func(Q(:,i))) > 1e-6
+    % binary search until the collision function is within tolerence or the
+    % change in timestep is within tolerance
+    dh = h/2;
+    while (abs(dist_to_ground_func(Q(:,i))) > 1e-6 || dh < 1e-6)
         if dist_to_ground_func(Q(:,i)) > 0
-            h = h+h/2;
+            h = h+dh;
         else
-            h = h-h/2;
+            h = h-dh;
         end
+        dh = dh/2;
         Q(:,i) = rk_step(derivs, Q(:,i-1),h);
     end
     
     T(i) = T(i-1) + h;
+    
+    % if failed set the failure flag
+    info = failure_func(Q(:,i),0);
+    if (info ~= 1)
+        T = T(1:i);
+        Q = Q(:,1:i);
+        return
+    end
     
     % remove excess vector
     T = T(1:i);
