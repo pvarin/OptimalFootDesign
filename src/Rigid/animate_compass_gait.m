@@ -21,8 +21,9 @@ function animate_compass_gait(T,Q,params,varargin)
     
     h = figure(1);
     clf
-    [leg_1, leg_2] = plot_compass_gait(Q(:,1), h, params);
     h.Position =[10,50,ScreenW*.5-10,ScreenH*.5-25];
+    [leg_1, leg_2] = plot_compass_gait(Q(:,1), h, params);
+    
     drawnow;
     
     % animate all of the next sequences
