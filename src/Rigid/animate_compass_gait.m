@@ -13,9 +13,16 @@ function animate_compass_gait(T,Q,params,varargin)
     end
 
     % construct the inital plot
+    
+    ScreenSize= get( groot, 'Screensize' );
+    ScreenW=ScreenSize(3)-1;
+    ScreenH=ScreenSize(4)-1;
+    
+    
     h = figure(1);
     clf
     [leg_1, leg_2] = plot_compass_gait(Q(:,1), h, params);
+    h.Position =[10,50,ScreenW*.5-10,ScreenH*.5-25];
     drawnow;
     
     % animate all of the next sequences
