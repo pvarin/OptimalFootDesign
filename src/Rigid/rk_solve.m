@@ -82,7 +82,7 @@ function [T, Q, info] = rk_solve(derivs, tmax, h, q0, collision_func, dist_to_gr
     % binary search until the collision function is within tolerence or the
     % change in timestep is within tolerance
     dh = h/2;
-    while (abs(dist_to_ground_func(Q(:,i))) > 1e-6 || dh < 1e-6)
+    while (abs(dist_to_ground_func(Q(:,i))) > 1e-6) || (dh > 1e-6)
         if dist_to_ground_func(Q(:,i)) > 0
             h = h+dh;
         else

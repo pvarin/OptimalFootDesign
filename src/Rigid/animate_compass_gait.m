@@ -39,8 +39,8 @@ function [leg_1, leg_2] = plot_compass_gait(q, h, params)
     R = [ cos(params.gamma), sin(params.gamma);
          -sin(params.gamma), cos(params.gamma)];
     
-    X1 = R*X1;
-    X2 = R*X2;
+    X1 = R*X1(1:2);
+    X2 = R*X2(1:2);
     
     % plot the ground
     c = 2*params.L*cos(params.gamma);
@@ -61,8 +61,8 @@ function update_compass_gait(q, leg_1, leg_2, params)
     R = [ cos(params.gamma), sin(params.gamma);
          -sin(params.gamma), cos(params.gamma)];
     
-    X1 = R*X1;
-    X2 = R*X2;
+    X1 = R*X1(1:2);
+    X2 = R*X2(1:2);
     
     set(leg_1,{'XData','YData'},{[0,X1(1)],[0,X1(2)]});
     set(leg_2,{'XData','YData'},{[X1(1),X2(1)],[X1(2),X2(2)]});
