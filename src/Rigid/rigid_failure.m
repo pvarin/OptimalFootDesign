@@ -28,23 +28,4 @@ function info = rigid_failure(q,params,solving)
             return 
         end
     end
-%     if q(4) > 0
-%         info = 3;
-%         return
-%     end
 end
-    
-%     %Test for tipping backward
-%         if (q(3) > 0)
-%             info = 2;
-%         end
-%     
-%     %Test for tipping forward
-%     
-%     if solving==0
-%         [X1,X2]=to_cartesian(q, L);
-%         if abs(X1(1))> abs(X2(1))
-%             info = 3;
-%         end
-%     end
-% end
