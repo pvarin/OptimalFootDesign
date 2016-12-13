@@ -3,7 +3,7 @@ close all;
 
 %Define Constants and Initial Conditions
 params.m = 1;
-params.M = 9;
+params.M = 10;
 params.beta = 0.1;
 params.L = 1;
 %params.gamma = 0.0043633;
@@ -16,7 +16,7 @@ d_theta_range = linspace(-.7,-.05,20);
 d_phi_range = linspace(-1,0.2,20);
 transitions = zeros(8001,8001);
 transitions(1,1) = 1;
-gamma_range = linspace(.16*(pi/180),3*(pi/180),10);
+gamma_range = linspace(.25*(pi/180),1*(pi/180),10);
 for gs = 1:1
     gs
     params.gamma = gamma_range(gs);
@@ -70,13 +70,14 @@ for i = 1:20
 %     pause(5)
 %     end
         transitions(indexer(i,j,k)+1,indexer(theta_state,d_theta_state,d_phi_state)+1) = transitions(indexer(i,j,k)+1,indexer(theta_state,d_theta_state,d_phi_state)+1) + 1;      
-        if (indexer(i,j,k))==indexer(theta_state,d_theta_state,d_phi_state)
+        if ((indexer(i,j,k))==indexer(theta_state,d_theta_state,d_phi_state)+1)
             disp('This may be a stable point')
             disp(strcat('theta(0) = ',num2str(q0(1))))
             disp(strcat('phi(0) = ',num2str(q0(2))))
             disp(strcat('d_theta(0) = ',num2str(q0(3))))
             disp(strcat('d_phi(0) = ',num2str(q0(4))))
             disp(strcat('gamma = ',num2str(gamma_range(gs))))
+            disp(strcat(num2str(q0(1)),';',num2str(q0(2)),';',num2str(q0(3)),';',num2str(q0(4))))
         end
     end    
         end
