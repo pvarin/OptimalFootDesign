@@ -5,9 +5,7 @@ function [collision] = collision_rigid_level(q)
 %
 % Outputs:  collision (boolean, 1 = collision);
 
-
- collision = (2*q(1)<=q(2) && q(2)<0);
-
+    collision = (2*q(1)<=q(2) && q(2)<0);
 
 end
 
