@@ -6,8 +6,6 @@ params.m = 1;
 params.M = 10;
 params.beta = 0.1;
 params.L = 1;
-% params.gamma = 2.84*pi/180;
-params.gamma = 0.0043633;
 params.a=0.5;
 params.b=0.5;
 
