@@ -22,7 +22,7 @@ function [T, Q, info] = solve_one_step_rough_terrain(q0,params,gamma_next,vararg
     options.h = 0.01;
     
     % Unpack parameters from options struct
-    if nargin > 2
+    if nargin > 3
         opts = varargin{1};
         if isfield(opts,'tmax')
             options.tmax = opts.tmax;
