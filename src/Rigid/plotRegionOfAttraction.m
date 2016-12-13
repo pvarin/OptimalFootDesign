@@ -10,6 +10,7 @@ params.b=0.5;
 Theta0=pi/10;
 Phi0=2*Theta0;
 
+% Beware with N=M=250 this takes ~18 minutes to run
 M = 250;
 N = 250;
 NumSteps = zeros(M,N);
